@@ -14,6 +14,17 @@
             $data = [];
             $bookmarks = DB::select('SELECT * FROM bookmarks');
             $data['bookmarks'] = $bookmarks;
+
+            $user = Session::get('user');
+            $expected = ['id', 'username', 'bookmark_id', 'email'];
+            foreach($expected as $k => $v) {
+                if(empty($user[$v])) {
+                    $user[$v] = '';
+                }
+            }
+
+            $data['user'] = $user;
+
             return View::make('boars')->with($data);
         }
 
@@ -23,7 +34,7 @@
 
         public function login_api(){
             $request = Request::all();
-
+            $this->login($request['username'], $request['pass']);
         }
 
         public function login($username, $password){
@@ -99,6 +110,7 @@
         }
 
         public function add() {
-            echo 'Thing';
+            $request = Request::all();
+            var_dump($request);
         }
     }

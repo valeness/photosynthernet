@@ -1,6 +1,7 @@
 var req = new XMLHttpRequest();
-req.open('GET', '//photosynthernet.com/marky/add', true);
-req.send(null);
+req.open('GET', '//photosynthernet.com/boars/add', true);
+req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+req.send(JSON.stringify({data : 'thing'}));
 
 req.onreadystatechange = function() {
   var DONE = 4;
@@ -10,4 +11,4 @@ req.onreadystatechange = function() {
       alert(req.responseText);
     }
   }
-}
+};

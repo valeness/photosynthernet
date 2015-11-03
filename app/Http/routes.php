@@ -1,5 +1,9 @@
 <?php
 
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Origin');
+header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Credentials: true');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -19,3 +23,5 @@ Route::any('/boars', ['as'=>'boars', 'uses'=>'BoarsController@index']);
 Route::any('/boars/add', ['as'=>'boars/add', 'uses'=>'BoarsController@add']);
 Route::any('/boars/register', ['as'=>'boars/register', 'uses'=>'BoarsController@register_view']);
 Route::post('/boars/register/create', ['as'=>'boars/register/create', 'uses'=>'BoarsController@register']);
+Route::any('/boars/login', ['as'=>'boars/login', 'uses'=>'BoarsController@login_view']);
+Route::any('/boars/login_api', ['as'=>'boars/login_api', 'uses'=>'BoarsController@login_api']);

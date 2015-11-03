@@ -2,6 +2,22 @@ function getRegisterInfo(){
     var retval = {};
     var error = '';
     var required = ['username', 'email', 'pass', 'confirm_pass', '_token'];
+    retval = getInput(required);
+
+    if(error.length > 0) {
+        alert(error);
+        return false;
+    } else {
+        return retval;
+    }
+}
+
+function getInput(required){
+    const token_id = '_token';
+    var retval = {};
+    var error = '';
+    required.push(token_id);
+
     $.each(required, function(ind, val) {
         const key = '#' + val;
         retval[val] = $(key).val();
@@ -10,12 +26,13 @@ function getRegisterInfo(){
         }
     });
 
-    if(error.length > 0) {
-        alert(error);
-        return false;
-    } else {
-        return retval;
-    }
+    return retval;
+}
+
+function getLoginInfo() {
+    var required = ['username', 'pass'];
+    var retval = getInput(required);
+    return retval;
 }
 
 function register_submit() {
@@ -32,12 +49,22 @@ function register_submit() {
     });
 }
 
-$('#register_submit').on('click', function() {
-    register_submit();
+function login_submit() {
+    var data = getLoginInfo();
+    $.ajax({
+        url : '/boars/login_api',
+        type : 'post',
+        data : data,
+        success : function(r) {
+            console.log(r);
+        }
+    })
+}
+
+$('#login_submit').on('click', function() {
+    login_submit();
 });
 
-$('input').on('keypress', function(e) {
-    if(e.keyCode == '13') {
-        register_submit();
-    }
+$('#register_submit').on('click', function() {
+    register_submit();
 });
