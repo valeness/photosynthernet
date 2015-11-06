@@ -56,7 +56,12 @@ function login_submit() {
         type : 'post',
         data : data,
         success : function(r) {
-            console.log(r);
+            r = JSON.parse(r);
+            if(r['validated']) {
+                window.location.href = '/boars';
+            } else {
+                alert('Invalid Username or Password');
+            }
         }
     })
 }

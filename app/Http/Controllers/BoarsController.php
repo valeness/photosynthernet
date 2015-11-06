@@ -10,6 +10,7 @@
     use Session;
 
     class BoarsController extends Controller {
+
         public function index() {
             $data = [];
             $bookmarks = DB::select('SELECT * FROM bookmarks');
@@ -29,12 +30,21 @@
         }
 
         public function login_view(){
-            return View::make('login');
+            $data = [];
+            $data['verified'] = Session::get('user')['id'] ? True : False;
+            return View::make('login')->with($data);
         }
 
         public function login_api(){
             $request = Request::all();
-            $this->login($request['username'], $request['pass']);
+            $retval = [];
+            $res = $this->login($request['username'], $request['pass']);
+            if(empty($res['error'])) {
+                $retval['validated'] = 1;
+            } else {
+                $retval['validated'] = 0;
+            }
+            return json_encode($retval);
         }
 
         public function login($username, $password){
@@ -43,6 +53,10 @@
             if(!empty($user) && count($user) == 1) {
                 $user = $user[0];
                 $db_pass = $user['password'];
+                $sess_user = Session::get('user');
+                if(!empty($sess_user)) {
+                    Session::forget('user');
+                }
             } else {
                 $error = 'User Not Found';
             }
@@ -56,6 +70,11 @@
 
             $retval['error'] = $error;
             return $retval;
+        }
+
+        public function logout() {
+            Session::forget('user');
+            Session::destroy();
         }
 
         private function createUser($request) {
@@ -109,8 +128,50 @@
             return $retval;
         }
 
-        public function add() {
-            $request = Request::all();
-            var_dump($request);
+        public function get_bookmarks() {
+            $user = Session::get('user');
+            if(empty($user)) {
+                exit;
+            }
+            $data= [];
+            $bookmark_id = $user['bookmark_id'];
+            $bookmarks = DB::select('SELECT * FROM bookmarks WHERE bookmark_id = ?', [$bookmark_id]);
+            $data['bookmarks'] = $bookmarks;
+            $data['user'] = $user;
+            return View::make('bookmarks')->with($data);
+        }
+
+        public function add($auth) {
+            $ref = $_SERVER['HTTP_REFERER'];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $ref);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $output = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if($http_code != 200) {
+                exit;
+            } else {
+                $title = explode('<title>', $output);
+                if(!empty($title[1])) {
+                    $title = explode('</title>', $title[1])[0];
+                } else {
+                    $title = $ref;
+                }
+                $url = $ref;
+                $tags = '';
+                $curr_marks = DB::select('SELECT url from bookmarks WHERE bookmark_id = ?', [$auth]);
+                $ret = '';
+                foreach($curr_marks as $mark) {
+                    if($mark['url'] == $url) {
+                        $ret = 'Url already bookmarked';
+                    }
+                }
+                $ins = DB::insert('INSERT INTO bookmarks (name, url, tags, bookmark_id) VALUES (?, ?, ?, ?)', [$title, $url, $tags, $auth]);
+                if($ins) {
+                    $ret = 'Success';
+                }
+                echo $ret;
+            }
         }
     }

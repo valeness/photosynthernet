@@ -8,8 +8,12 @@
     <section class="top-bar-section">
         <!-- Left Nav -->
         <ul class="left">
-            <li class="login"><a href="/boars/login">Login</a></li>
-            <li class="Register"><a href="/boars/register">Register</a></li>
+            @if(isset($user['id']))
+                <li><a href="/boars/bookmarks">Bookmarks</a></li>
+            @else
+                <li><a href="/boars/login">Login</a></li>
+                <li><a href="/boars/register">Register</a></li>
+            @endif
         </ul>
     </section>
 </nav>
