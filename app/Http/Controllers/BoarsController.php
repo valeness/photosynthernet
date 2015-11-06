@@ -164,12 +164,15 @@
                 $ret = '';
                 foreach($curr_marks as $mark) {
                     if($mark['url'] == $url) {
-                        $ret = 'Url already bookmarked';
+                        $ret = 'Page already bookmarked!';
+                        $error = 4;
                     }
                 }
-                $ins = DB::insert('INSERT INTO bookmarks (name, url, tags, bookmark_id) VALUES (?, ?, ?, ?)', [$title, $url, $tags, $auth]);
-                if($ins) {
-                    $ret = 'Success';
+                if(empty($error)) {
+                    $ins = DB::insert('INSERT INTO bookmarks (name, url, tags, bookmark_id) VALUES (?, ?, ?, ?)', [$title, $url, $tags, $auth]);
+                    if($ins) {
+                        $ret = 'Success';
+                    }
                 }
                 echo $ret;
             }
