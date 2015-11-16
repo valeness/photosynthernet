@@ -1,3 +1,26 @@
 body {
-  background: #262626;
+  /*background: #262626;*/
+}
+
+.del-bookmark {
+    color: #F04124;
+    cursor: pointer;
+}
+
+.del-bookmark:hover {
+    text-decoration: underline;
+}
+
+.toaster-template {
+    display: none;
+    background: #F04124;
+    color: #FFF;
+    padding: 4px;
+    position: fixed;
+    top: -100px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 40%;
+    text-align: center;
 }

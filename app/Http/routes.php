@@ -24,9 +24,11 @@ Route::get('/boars/add/{auth}', function($auth){
     $boars = new \App\Http\Controllers\BoarsController();
     $boars->add($auth);
 });
+Route::post('/boars/delete', ['as'=>'boars/delete', 'uses'=>'BoarsController@delete']);
 
 Route::any('/boars/bookmarks', ['as'=>'boars/bookmarks', 'uses'=>'BoarsController@get_bookmarks']);
 Route::any('/boars/register', ['as'=>'boars/register', 'uses'=>'BoarsController@register_view']);
 Route::post('/boars/register/create', ['as'=>'boars/register/create', 'uses'=>'BoarsController@register']);
 Route::any('/boars/login', ['as'=>'boars/login', 'uses'=>'BoarsController@login_view']);
 Route::any('/boars/login_api', ['as'=>'boars/login_api', 'uses'=>'BoarsController@login_api']);
+Route::any('/boars/logout', ['as'=>'boars/logout', 'uses'=>'BoarsController@logout']);

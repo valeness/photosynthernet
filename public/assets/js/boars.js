@@ -58,9 +58,9 @@ function login_submit() {
         success : function(r) {
             r = JSON.parse(r);
             if(r['validated']) {
-                window.location.href = '/boars';
+                window.location.href = '/boars/bookmarks';
             } else {
-                alert('Invalid Username or Password');
+                toast.display('Invalid Username or Password');
             }
         }
     })
@@ -73,3 +73,43 @@ $('#login_submit').on('click', function() {
 $('#register_submit').on('click', function() {
     register_submit();
 });
+
+// Delete Bookmark
+$('.del-bookmark').on('click', function(){
+    var id = $(this).attr('data-id');
+    var parent = $(this).parent().parent();
+    $.ajax({
+        url : '/boars/delete',
+        type : 'post',
+        data : {id : id},
+        success : function(r) {
+            parent.slideUp();
+        }
+    })
+});
+
+var toast_timeout;
+
+var toast = {
+    display : function(msg) {
+        var toast = $('.toaster-template');
+        toast.empty();
+        toast.text(msg);
+        toast.show();
+        toast.animate({
+            top : '0'
+        }, 1000, function() {
+            // Callback
+            if(typeof toast_timeout != 'undefined') {
+                window.clearTimeout(toast_timeout);
+            }
+            toast_timeout = setTimeout(function() {
+                toast.animate({
+                    top : '-100'
+                }, 1000, function(){
+                    toast.hide();
+                })
+            }, 4000)
+        });
+    }
+};

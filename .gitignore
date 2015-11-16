@@ -3,3 +3,7 @@
 Homestead.yaml
 Homestead.json
 .env
+bin/
+bin/phantomjs
+bin/phpunit
+bin/psysh

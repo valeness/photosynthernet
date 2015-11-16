@@ -13,14 +13,23 @@
       </div>
       <div class="row">
           <div class="small-6 columns">
-              <p>
-                  Drag/Drop this link to your bookmarks bar and then just click it whenever you want to bookmark a page!
-              </p>
-            <a class="small button" href="javascript: (function () {
-                var markScript = document.createElement('script');
-                markScript.setAttribute('src', '//photosynthernet.com/assets/js/book.js');
-              document.body.appendChild(markScript);
-            }());"> Mark Me! </a>
+            @if($auth)
+            <p>
+                Drag/Drop this link to your bookmarks bar and then just click it whenever you want to bookmark a page!
+            </p>
+            <a class="small button" href="javascript:
+            (function(){
+                var mark_info = document.createElement('div');
+                mark_info.setAttribute('data-id', '{{ $user['bookmark_id'] }}');
+                document.body.appendChild(mark_info);
+                mark_info.setAttribute('id', 'bookmark_id');
+                 var markScript = document.createElement('script');
+                 markScript.setAttribute('src', '//photosynthernet.com/assets/js/book.js');
+                 document.body.appendChild(markScript);
+                })()"> Mark Me! </a>
+            @else
+                Welcome to B.O.A.R.S!
+            @endif
           </div>
       </div>
 

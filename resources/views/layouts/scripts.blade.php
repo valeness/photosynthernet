@@ -4,3 +4,5 @@
 <script>
   $(document).foundation();
 </script>
+
+<div class="toaster-template">Hello</div>

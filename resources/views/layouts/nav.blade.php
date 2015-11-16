@@ -8,7 +8,7 @@
     <section class="top-bar-section">
         <!-- Left Nav -->
         <ul class="left">
-            @if(isset($user['id']))
+            @if($auth)
                 <li><a href="/boars/bookmarks">Bookmarks</a></li>
             @else
                 <li><a href="/boars/login">Login</a></li>
