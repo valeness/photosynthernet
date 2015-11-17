@@ -6,7 +6,7 @@ req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 req.send(null);
 
 var alert_div = document.createElement('div');
-alert_div.setAttribute('style', 'position: fixed; top: 0; background: #F04124; color: #FFF; width:100%; text-align: center; margin: 0 !important;');
+alert_div.setAttribute('style', 'position: fixed; top: 0; background: #F04124; color: #FFF; width:100%; text-align: center; margin: 0 !important; z-index: 2147483638;');
 
 req.onreadystatechange = function() {
     var DONE = 4;
