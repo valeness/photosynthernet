@@ -42,8 +42,15 @@ function register_submit() {
         type : 'post',
         data : data,
         success : function(r) {
-            if(r['error'] != '') {
-                alert(r['error']);
+            if(r['status'] == 0) {
+
+                var toast_html = '';
+                $.each(r['error'], function(ind, val) {
+                    toast_html += val + '<br />';
+                })
+                toast.display(toast_html);
+            } else {
+                window.location.href = '/boars';
             }
         }
     });
@@ -94,7 +101,7 @@ var toast = {
     display : function(msg) {
         var toast = $('.toaster-template');
         toast.empty();
-        toast.text(msg);
+        toast.html(msg);
         toast.show();
         toast.animate({
             top : '0'

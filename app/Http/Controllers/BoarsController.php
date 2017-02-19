@@ -42,8 +42,10 @@
             return View::make('login')->with($data);
         }
 
-        public function login_api(){
-            $request = Request::all();
+        public function login_api($request = []){
+            if(empty($request)) {
+                $request = Request::all();
+            }
             $retval = [];
             $res = $this->user->login($request['username'], $request['pass']);
             if(empty($res['error'])) {
@@ -59,12 +61,27 @@
         }
 
         private function createUser($request) {
-            $retval = [];
-            $required = ['username', 'email', 'pass', 'confirm_pass'];
-            $error = '';
-            foreach($required as $v) {
-                if(empty($request[$v])) {
-                    $error .= $v . ' is required';
+            $retval = [
+                'status' => 1
+            ];
+            $required = [
+                'username' => [
+                    'human' => 'Username'
+                ],
+                'email' => [
+                    'human' => 'E-Mail'
+                ],
+                'pass' => [
+                    'human' => 'Password'
+                ],
+                'confirm_pass' => [
+                    'human' => 'Confirm Password'
+                ]
+            ];
+            $error = [];
+            foreach($required as $k => $v) {
+                if(empty($request[$k])) {
+                    $error[] = $v['human'] . ' is required';
                 }
             }
 
@@ -78,22 +95,23 @@
                         $password = Hash::make($request['pass']);
                         $bookmark_id = 'mark_' . md5(uniqid());
                         $ins = DB::insert('INSERT INTO users (username, password, email, bookmark_id) VALUES (?, ?, ?, ?)', [$request['username'], $password, $request['email'], $bookmark_id]);
-                        $login_data = $this->login($request['username'], $request['pass']);
+                        $login_data = $this->user->login($request['username'], $request['pass']);
                         if($login_data['error'] != '') {
                             var_dump('What the literal fuck?');
                             exit;
-                        } else {
-                            return Redirect::to('/');
                         }
                     } else {
-                        $error .= 'Your Passwords do not match \n';
+                        $error[] = 'Your Passwords do not match';
                     }
 
                 } else {
-                    $error .= 'Account Already Exists \n';
+                    $error[] = 'Account Already Exists';
                 }
             }
 
+            if(!empty($error)) {
+                $retval['status'] = 0;
+            }
             $retval['error'] = $error;
             return $retval;
 

@@ -32,3 +32,10 @@ Route::post('/boars/register/create', ['as'=>'boars/register/create', 'uses'=>'B
 Route::any('/boars/login', ['as'=>'boars/login', 'uses'=>'BoarsController@login_view']);
 Route::any('/boars/login_api', ['as'=>'boars/login_api', 'uses'=>'BoarsController@login_api']);
 Route::any('/boars/logout', ['as'=>'boars/logout', 'uses'=>'BoarsController@logout']);
+Route::any('/webdevvit', ['as'=>'webdevvit', 'uses'=>'WebdevvitController@index']);
+
+Route::any('/choice', ['as'=>'/choice', 'uses'=>'ChoiceController@index']);
+
+Route::any('/test2', function() {
+    return View::make("whitney");
+});
